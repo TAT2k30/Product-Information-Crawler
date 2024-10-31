@@ -7,7 +7,7 @@ export const connectMongoDB = async () => {
   const connectWithRetry = async () => {
     try {
       await mongoose.connect(`${mongoURI}/${dbName}`, {
-        serverSelectionTimeoutMS: 5000, //Thời gian lâu nhất mà mongo đợi để connect db
+        serverSelectionTimeoutMS: 5000, 
         socketTimeoutMS: 45000,
       });
 
@@ -25,7 +25,7 @@ export const connectMongoDB = async () => {
         "MongoDB connection failed, retrying in 5 seconds...",
         error
       );
-      setTimeout(connectWithRetry, 5000); // Retry after 5 seconds
+      setTimeout(connectWithRetry, 5000); 
     }
   };
   connectWithRetry();
