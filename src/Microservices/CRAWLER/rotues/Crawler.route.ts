@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { fetchData } from "../controllers/Crawler.Controller";
+import { fetchProductData } from "../controllers/Crawler.Controller";
 import { crawlerFetchDataMiddleWare } from "../middlewares/contracts/crawler.middleware";
 
 const router = Router();
 
-router.post("/fetchData", crawlerFetchDataMiddleWare, fetchData);
+router.post("/fetchData", crawlerFetchDataMiddleWare, fetchProductData);
 
 export default router;
