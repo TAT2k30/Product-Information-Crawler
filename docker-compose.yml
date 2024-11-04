@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  crawler:
+    build:
+      context: .
+      dockerfile: src/Microservices/CRAWLER/Dockerfile
+    ports:
+      - "3001:3000"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=mongodb://db:27017/crawlerdb
+    depends_on:
+      - db
+
+  api-gateway:
+    build:
+      context: .
+      dockerfile: src/Microservices/API_GATEWAY/Dockerfile
+    ports:
+      - "3002:3000"
+    environment:
+      - NODE_ENV=production
+
+  db:
+    image: mongo:5
+    volumes:
+      - dbdata:/data/db
+
+volumes:
+  dbdata:

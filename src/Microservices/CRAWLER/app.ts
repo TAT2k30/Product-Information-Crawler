@@ -4,6 +4,7 @@ import { crawlerConfig } from "../../configs";
 import { errorHandler } from "./middlewares/handlers/error.handler";
 import { notFoundHandler } from "./middlewares/handlers/notFound.handler";
 import Crawler  from "../CRAWLER/rotues/Crawler.route";
+import { initMongoDB } from "../../helpers/init_mongo";
 const app = express();
 
 //Middlewares
@@ -11,6 +12,8 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+//Init mongo
+initMongoDB();
 
 // Định nghĩa các route
 app.use("/crawler", Crawler);
