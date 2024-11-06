@@ -6,14 +6,17 @@ import NotFoundPage from "../../pages/404Page/NotFoundPage";
 import Login from "../../components/auths/login/Login";
 import Register from "../../components/auths/register/Signup";
 import React from "react";
+import View from "../../components/views/View";
+import { AppRoutesProp } from "../../rules/props/AppRoutesProps";
 
 
-const AppRoutes = () => {
+const AppRoutes = ({ currentBodyLightMode, currentShadowLightMode, currentTextLightMode, isLightMode, setIsLightMode }: AppRoutesProp) => {
     return (
         <div className="min-h-screen">
             <Routes>
                 {/* Public Routes - Các route ra vào thoải mải không ràng buộc*/}
-                <Route path="/" element={<HomePage />} />
+                <Route path="/" element={<HomePage isLightMode={isLightMode} setLightMode={setIsLightMode} currentBodyLightMode={currentBodyLightMode} currentShadowLightMode={currentShadowLightMode} currentTextLightMode={currentTextLightMode} />} />
+                <Route path="/view" element={<View />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
 

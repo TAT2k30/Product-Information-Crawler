@@ -1,17 +1,20 @@
-import express, { Request, Response, NextFunction } from "express";
+import express from "express";
 import cors from "cors";
 import { gatewayConfig } from "../../configs";
-
-
+import { rateLimitMiddleware } from "./middlewares/RateLimit.middleware";
+import { createProxyMiddleware } from "http-proxy-middleware";
+import RootAPI from "./routes/Gateway.routes";
 const app = express();
-//Middlewares
+
+// Middlewares chung
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use("/gateWay", RootAPI);
 
-
-// Lắng nghe cổng
 app.listen(gatewayConfig.port, () => {
-  console.log(`Server for Api Gateway running on port http://localhost:${gatewayConfig.port}`);
+  console.log(
+    `Server for API Gateway running on port http://localhost:${gatewayConfig.port}`
+  );
 });

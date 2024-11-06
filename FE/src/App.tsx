@@ -28,7 +28,12 @@ function App() {
             currentTextLightMode={textClass}
             currentShadowLightMode={shadowClass}
           />
-          <AppRoutes />
+          <AppRoutes
+            isLightMode={lightMode}
+            setIsLightMode={setLightMode}
+            currentBodyLightMode={backgroundClass}
+            currentTextLightMode={textClass}
+            currentShadowLightMode={shadowClass} />
           <Footer
             currentBodyLightMode={backgroundClass}
             currentTextLightMode={textClass}

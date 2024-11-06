@@ -16,13 +16,13 @@ function Header({ lightMode, setLightMode, currentBodyLightMode, currentTextLigh
   };
 
   return (
-    <header className={`flex ${currentShadowLightMode} py-4 px-4 sticky top-0 sm:px-10 ${currentBodyLightMode} font-[sans-serif] min-h-[70px] tracking-wide z-50 transition-all duration-500 mb-4`}>
+    <header className={`flex ${currentShadowLightMode} px-4 sticky top-0 sm:px-10 ${currentBodyLightMode} font-[sans-serif] min-h-[70px] tracking-wide z-50 transition-all duration-500`}>
       <div className='flex flex-wrap items-center justify-between gap-4 w-full'>
         <Link
           to={"/"}
           className="lg:absolute max-lg:left-10 lg:top-2/4 lg:left-2/4 lg:-translate-x-1/2 lg:-translate-y-1/2">
           <b className={`text-xl ${currentTextLightMode} transition-all duration-300`}>
-            Planet Empires
+            Crawler project
           </b>
         </Link>
 
@@ -44,17 +44,12 @@ function Header({ lightMode, setLightMode, currentBodyLightMode, currentTextLigh
             {/* Các nút được điều chỉnh */}
             <li className={`max-lg:border-b max-lg:py-3 px-3 w-full ${currentRoute.pathname === "/" ? "border-b-3 border-red-200" : ""}`}>
               <Link to={"/"} className={`${currentTextLightMode} ${lightMode ? "hover:text-commonHoverBlack hover:text-xl" : "hover:text-commonHoverBlue hover:text-xl"} block font-semibold text-[15px] w-full text-center py-3 bg-transparent transition-all`}>
-                Home
+                Crawl
               </Link>
             </li>
             <li className='max-lg:border-b max-lg:py-3 px-3 w-full'>
-              <Link to={"/team"} className={`${currentTextLightMode} ${lightMode ? "hover:text-commonHoverBlack hover:text-xl" : "hover:text-commonHoverBlue hover:text-xl"} block font-semibold text-[15px] w-full text-center py-3 bg-transparent transition-all`}>
-                Team
-              </Link>
-            </li>
-            <li className='max-lg:border-b max-lg:py-3 px-3 w-full'>
-              <Link to={"/shop"} className={`${currentTextLightMode} ${lightMode ? "hover:text-commonHoverBlack hover:text-xl" : "hover:text-commonHoverBlue hover:text-xl"} block font-semibold text-[15px] w-full text-center py-3 bg-transparent transition-all`}>
-                Shop
+              <Link to={"/view"} className={`${currentTextLightMode} ${lightMode ? "hover:text-commonHoverBlack hover:text-xl" : "hover:text-commonHoverBlue hover:text-xl"} block font-semibold text-[15px] w-full text-center py-3 bg-transparent transition-all`}>
+                View
               </Link>
             </li>
             <li className='max-lg:border-b max-lg:py-2 px-0 w-full flex items-center gap-2'>
@@ -75,14 +70,14 @@ function Header({ lightMode, setLightMode, currentBodyLightMode, currentTextLigh
         </div>
 
         <div className='flex items-center ml-auto space-x-6'>
-          <Link
+          {/* <Link
             to={"/login"} className={`font-semibold text-[15px] border-none outline-none ${currentTextLightMode} transition-all duration-300`}>
             Login
           </Link>
           <Link
             to={"/register"}
             className={`px-4 py-2 text-sm rounded-sm font-bold ${currentTextLightMode} border-2 ${lightMode ? "border-commonBlack hover:text-white hover:bg-commonBlack" : "border-commonBlue hover:bg-white hover:text-commonBlue hover:border-white"} transition-all ease-in-out duration-300`}>Sign
-            up</Link>
+            up</Link> */}
 
           {/* Nút để mở Side Nav */}
           <button className={`lg:hidden ${currentTextLightMode}`} onClick={toggleSideNav}>

@@ -10,18 +10,28 @@ export const handleFetchProductData = async (
   const { url } = req.body;
 
   try {
+    console.log("Received fetchData request:", req.body);
     const response = await axios.get(url);
     const $ = cheerio.load(response.data);
 
-    // Lọc thông tin sản phẩm
-    const productName = $("#productTitle").text().trim(); // Giả định tên sản phẩm nằm trong #productTitle
-    const currentPriceText = $(".a-price .a-offscreen").text().trim(); // Giả định giá sản phẩm
-    const currentPrice = parseFloat(currentPriceText.replace(/[$,]/g, "")); // Chuyển đổi sang số
-    const imageUrl = $("#landingImage").attr("src"); // Giả định hình ảnh nằm trong #landingImage
-    const description = $("#productDescription").text().trim(); // Giả định mô tả nằm trong #productDescription
-    const platformLinks = [{ platform: "Amazon", url }]; // Liên kết đến nền tảng (có thể thêm nhiều nền tảng khác)
+    //Image selector 
+    const imageSelector = "#imageBlock .a-fixed-left-grid .a-fixed-left-grid-inner #altImages .a-unordered-list.a-nostyle.a-button-list.a-vertical.a-spacing-top-micro.regularAltImageViewLayout"
+    //Section chứa image sản phẩm
+    let productImages: string[] = $(imageSelector).map((index, element) => {
+      $(element).attr('li')
+    }).get();
 
-    // Kiểm tra thông tin
+
+    console.log(productImages);
+
+    // Lọc thông tin sản phẩm
+    const productName = $("#productTitle").text().trim();
+    const currentPriceText = $(".a-price .a-offscreen").text().trim();
+    const currentPrice = parseFloat(currentPriceText.replace(/[$,]/g, ""));
+    const imageUrl = $("#landingImage").attr("src");
+    const description = $("#productDescription").text().trim();
+    const platformLinks = [{ platform: "Amazon", url }];
+
     if (!productName || !currentPrice || !imageUrl) {
       res
         .status(404)
@@ -31,14 +41,14 @@ export const handleFetchProductData = async (
     // Tạo đối tượng sản phẩm
     const productData = {
       productName,
-      category: "Electronics", // Thay đổi theo yêu cầu
+      category: "Electronics",
       description,
       imageUrl,
       currentPrice,
       priceHistory: [{ price: currentPrice }],
       platformLinks,
       ratings: {
-        averageRating: 0, // Có thể thêm logic để lấy đánh giá nếu có
+        averageRating: 0,
         reviewCount: 0,
       },
       stockStatus: true,
@@ -68,3 +78,7 @@ export const handleGetAllProductInfoFromDb = async (
   req: Request,
   res: Response
 ): Promise<void> => {};
+
+export const handleGetImages = async () => {
+
+}
