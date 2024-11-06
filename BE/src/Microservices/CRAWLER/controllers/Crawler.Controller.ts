@@ -10,26 +10,15 @@ export const handleFetchProductData = async (
   const { url } = req.body;
 
   try {
-    console.log("Received fetchData request:", req.body);
     const response = await axios.get(url);
     const $ = cheerio.load(response.data);
-
-    //Image selector 
-    const imageSelector = "#imageBlock .a-fixed-left-grid .a-fixed-left-grid-inner #altImages .a-unordered-list.a-nostyle.a-button-list.a-vertical.a-spacing-top-micro.regularAltImageViewLayout"
-    //Section chứa image sản phẩm
-    let productImages: string[] = $(imageSelector).map((index, element) => {
-      $(element).attr('li')
-    }).get();
-
-
-    console.log(productImages);
 
     // Lọc thông tin sản phẩm
     const productName = $("#productTitle").text().trim();
     const currentPriceText = $(".a-price .a-offscreen").text().trim();
     const currentPrice = parseFloat(currentPriceText.replace(/[$,]/g, ""));
     const imageUrl = $("#landingImage").attr("src");
-    const description = $("#productDescription").text().trim();
+    const description = $(".a-unordered-list").text().trim();
     const platformLinks = [{ platform: "Amazon", url }];
 
     if (!productName || !currentPrice || !imageUrl) {
@@ -41,18 +30,16 @@ export const handleFetchProductData = async (
     // Tạo đối tượng sản phẩm
     const productData = {
       productName,
-      category: "Electronics",
       description,
       imageUrl,
       currentPrice,
-      priceHistory: [{ price: currentPrice }],
       platformLinks,
       ratings: {
         averageRating: 0,
         reviewCount: 0,
       },
-      stockStatus: true,
-      lastUpdated: new Date(),
+      fetchDate: new Date(),
+      source: "Amazon",
     };
 
     // Lưu sản phẩm vào cơ sở dữ liệu
@@ -77,8 +64,19 @@ export const handleFetchProductData = async (
 export const handleGetAllProductInfoFromDb = async (
   req: Request,
   res: Response
-): Promise<void> => {};
-
-export const handleGetImages = async () => {
-
-}
+): Promise<void> => {
+  try {
+    const products = await Product.find();
+    res.status(200).json({
+      success: true,
+      data: products,
+    });
+  } catch (error) {
+    console.error("Error fetching products from database: ", error);
+    res.status(500).json({
+      success: false,
+      message: "Error fetching products from database",
+      error: error instanceof Error ? error.message : "Unknown error",
+    });
+  }
+};

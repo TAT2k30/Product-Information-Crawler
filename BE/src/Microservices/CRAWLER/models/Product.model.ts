@@ -8,11 +8,6 @@ const ProductSchema: Schema<IProduct> = new Schema(
       required: true,
       trim: true,
     },
-    category: {
-      type: String,
-      required: true,
-      trim: true,
-    },
     description: {
       type: String,
       trim: true,
@@ -25,30 +20,25 @@ const ProductSchema: Schema<IProduct> = new Schema(
       type: Number,
       required: true,
     },
-    priceHistory: [
-      {
-        price: { type: Number, required: true },
-        date: { type: Date, default: Date.now }
-      }
-    ],
     platformLinks: [
       {
-        platform: { type: String, required: true }, // Ví dụ: 'Amazon', 'eBay'
-        url: { type: String, required: true }
-      }
+        platform: { type: String, required: true }, 
+        url: { type: String, required: true },
+      },
     ],
     ratings: {
       averageRating: { type: Number, default: 0 },
-      reviewCount: { type: Number, default: 0 }
+      reviewCount: { type: Number, default: 0 },
     },
-    stockStatus: {
-      type: Boolean,
-      default: true
-    },
-    lastUpdated: {
+    fetchDate: {
       type: Date,
-      default: Date.now
-    }
+      default: Date.now,
+    },
+    source: {
+      type: String,
+      required: true,
+      trim: true,
+    },
   },
   { timestamps: true }
 );

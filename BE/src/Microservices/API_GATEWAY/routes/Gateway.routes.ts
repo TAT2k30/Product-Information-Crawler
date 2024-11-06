@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { fetchData } from "../controllers/ApiGateway.Controller";
+import { fetchData, getData } from "../controllers/ApiGateway.Controller";
 import { rateLimitMiddleware } from "../middlewares/RateLimit.middleware";
 
 const router = Router();
@@ -11,5 +11,6 @@ const createRateLimitMiddleware = rateLimitMiddleware({
 });
 
 router.post("/fetchData", createRateLimitMiddleware, fetchData);
+router.get("/getData", createRateLimitMiddleware, getData);
 
 export default router;
