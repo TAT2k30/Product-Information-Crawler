@@ -9,7 +9,7 @@ function App() {
 
   useEffect(() => {
     document.body.classList.add("transition-all", "duration-500");
-    document.body.classList.toggle("bg-bodyBlack", !lightMode);
+    document.body.classList.toggle("bg-commonBlack", !lightMode);
     document.body.classList.toggle("bg-white", lightMode);
   }, [lightMode]);
 

@@ -1,17 +1,63 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { HomePageProps } from '../../../rules/props/HomePageProps';
+import { ProductProps } from '../../../rules/props/ProductProps';
+import { IProduct } from '../../../rules/interfaces/Product.interface';
+import Product from '../../../components/products/Product';
 
 function HomePage({ currentBodyLightMode, currentShadowLightMode, currentTextLightMode, isLightMode, setLightMode }: HomePageProps) {
+    const [url, setUrl] = useState('');
+    const [isFetch, setIsFetch] = useState<boolean>(false);
+    const [product, setProduct] = useState<IProduct>();
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault(); 
+
+        try {
+            const response = await fetch('http://localhost:3000/gateWay/fetchData', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ url }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to crawl the URL');
+            }
+
+            const data = await response.json();
+            console.log('Crawling result:', data);
+            setIsFetch(true);
+            setProduct(data.data);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
+    const formattedProduct: ProductProps = {
+        currentBodyLightMode,
+        currentShadowLightMode,
+        currentTextLightMode,
+        productName: product?.productName || "Sample Product",
+        description: product?.description || "This is a sample description.",
+        imageUrl: product?.imageUrl || "https://via.placeholder.com/150",
+        currentPrice: product?.currentPrice || 0,
+        platformLinks: product?.platformLinks || [{ platform: "Amazon", url: url }],
+        ratings: product?.ratings || { averageRating: 0, reviewCount: 0 },
+        fetchDate: product?.fetchDate ? new Date(product.fetchDate) : new Date(),
+        source: product?.source || "Sample Source",
+    };
+
     return (
-        <div className={`flex flex-col justify-center items-center min-h-screen pt-8 -mt-8 ${isLightMode ? 'bg-white' : 'bg-commonBlack'} transition-colors duration-500`}>
-            <div className={`mb-4 text-lg font-semibold  ${isLightMode ? 'text-commonBlack hover:text-commonHoverBlack' : 'text-commonBlue hover:text-commonHoverBlue'}  transition-colors duration-500`}>
+        <div className={`flex flex-col mt-10 justify-center items-center ${isLightMode ? 'bg-white' : 'bg-commonBlack'} transition-colors duration-500`}>
+            <div className={`mb-4 text-lg font-semibold ${isLightMode ? 'text-commonBlack hover:text-commonHoverBlack' : 'text-commonBlue hover:text-commonHoverBlue'} transition-colors duration-500`}>
                 Supported Platforms:
                 <div className="flex gap-6 mt-5">
                     <img src="https://rubee.com.vn/wp-content/uploads/2021/06/thiet-ke-logo-cua-ebay.jpeg" alt="eBay" className="w-20 h-20 object-contain rounded-lg shadow-md" />
                     <img src="https://www.hatchwise.com/wp-content/uploads/2022/05/amazon-logo-1536x1024.png.webp" alt="Amazon" className="w-20 h-20 object-contain rounded-lg shadow-md" />
                 </div>
             </div>
-            <form className="w-full max-w-md space-y-4 transition-all duration-300">
+            <form className="w-full max-w-md space-y-4 transition-all duration-300" onSubmit={handleSubmit}>
                 <label htmlFor="search" className="sr-only">Search</label>
                 <div className="relative">
                     <input
@@ -20,8 +66,10 @@ function HomePage({ currentBodyLightMode, currentShadowLightMode, currentTextLig
                         className={`block w-full p-4 pl-10 text-sm rounded-lg shadow-lg focus:ring-2 focus:ring-blue-500 transition-all duration-500
                             ${isLightMode ? 'text-gray-700 bg-white border border-gray-300' : 'text-white bg-gray-800 border border-gray-700'}
                         `}
-                        placeholder="Input product's url for searching . . ."
+                        placeholder="Input product's URL for searching . . ."
                         required
+                        value={url}
+                        onChange={(e) => setUrl(e.target.value)}
                     />
                     <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                         <svg className={`w-5 h-5 ${isLightMode ? 'text-gray-500' : 'text-gray-400'}`} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
@@ -38,6 +86,12 @@ function HomePage({ currentBodyLightMode, currentShadowLightMode, currentTextLig
                     </button>
                 </div>
             </form>
+
+            {isFetch && (
+                <div className="mt-20">
+                    <Product {...formattedProduct} />
+                </div>
+            )}
         </div>
     );
 }

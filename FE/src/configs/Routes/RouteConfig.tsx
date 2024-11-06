@@ -5,9 +5,10 @@ import HomePage from "../../pages/userPages/publicPages/HomePage";
 import NotFoundPage from "../../pages/404Page/NotFoundPage";
 import Login from "../../components/auths/login/Login";
 import Register from "../../components/auths/register/Signup";
-import React from "react";
-import View from "../../components/views/View";
+
+
 import { AppRoutesProp } from "../../rules/props/AppRoutesProps";
+import ViewPage from "../../pages/userPages/publicPages/ViewPage";
 
 
 const AppRoutes = ({ currentBodyLightMode, currentShadowLightMode, currentTextLightMode, isLightMode, setIsLightMode }: AppRoutesProp) => {
@@ -16,7 +17,7 @@ const AppRoutes = ({ currentBodyLightMode, currentShadowLightMode, currentTextLi
             <Routes>
                 {/* Public Routes - Các route ra vào thoải mải không ràng buộc*/}
                 <Route path="/" element={<HomePage isLightMode={isLightMode} setLightMode={setIsLightMode} currentBodyLightMode={currentBodyLightMode} currentShadowLightMode={currentShadowLightMode} currentTextLightMode={currentTextLightMode} />} />
-                <Route path="/view" element={<View />} />
+                <Route path="/view" element={<ViewPage currentBodyLightMode={currentBodyLightMode} currentShadowLightMode={currentShadowLightMode} currentTextLightMode={currentTextLightMode} />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
 
