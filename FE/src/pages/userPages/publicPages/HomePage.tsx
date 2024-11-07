@@ -7,10 +7,12 @@ import Product from '../../../components/products/Product';
 function HomePage({ currentBodyLightMode, currentShadowLightMode, currentTextLightMode, isLightMode, setLightMode }: HomePageProps) {
     const [url, setUrl] = useState('');
     const [isFetch, setIsFetch] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const [product, setProduct] = useState<IProduct>();
 
     const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault(); 
+        e.preventDefault();
+        setIsLoading(true); 
 
         try {
             const response = await fetch('http://localhost:3000/gateWay/fetchData', {
@@ -31,10 +33,13 @@ function HomePage({ currentBodyLightMode, currentShadowLightMode, currentTextLig
             setProduct(data.data);
         } catch (error) {
             console.error('Error:', error);
+        } finally {
+            setIsLoading(false);  
         }
     };
 
     const formattedProduct: ProductProps = {
+        isLightMode,
         currentBodyLightMode,
         currentShadowLightMode,
         currentTextLightMode,
@@ -82,12 +87,21 @@ function HomePage({ currentBodyLightMode, currentShadowLightMode, currentTextLig
                             ${isLightMode ? 'bg-gray-800 text-white hover:bg-gray-700 focus:ring-gray-600' : 'bg-blue-600 text-white hover:bg-blue-500 focus:ring-blue-400'}
                         `}
                     >
-                        Crawl
+                        {isLoading ? 'Loading...' : 'Crawl'}
                     </button>
                 </div>
             </form>
 
-            {isFetch && (
+            {isLoading && (
+                <div className="mt-10 animate-spin text-gray-500">
+                    <svg className="w-8 h-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.75V6.25M12 17.75V19.25M4.75 12H6.25M17.75 12H19.25M7.757 7.757L9.172 9.172M14.828 14.828L16.243 16.243M16.243 7.757L14.828 9.172M9.172 14.828L7.757 16.243" />
+                    </svg>
+                    <p>Loading data...</p>
+                </div>
+            )}
+
+            {isFetch && !isLoading && (
                 <div className="mt-20">
                     <Product {...formattedProduct} />
                 </div>

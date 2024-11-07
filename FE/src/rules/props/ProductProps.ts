@@ -1,6 +1,7 @@
 import { CommonProps } from "./commons/CommonProps";
 
 export interface ProductProps extends CommonProps { 
+    isLightMode: boolean;
     productName?: string;
     description?: string;
     imageUrl?: string;
