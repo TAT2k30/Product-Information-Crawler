@@ -4,7 +4,7 @@ import ProductTable from '../../../components/products/ProductTable';
 import { ViewProps } from '../../../rules/props/ViewProps';
 import { IProduct } from '../../../rules/interfaces/Product.interface';
 
-function ViewPage() {
+function ViewPage({currentBodyLightMode,  currentShadowLightMode, currentTextLightMode} : ViewProps) {
     const [products, setProducts] = useState<IProduct[]>([]);
     const [filters, setFilters] = useState({
         name: '',
@@ -13,20 +13,47 @@ function ViewPage() {
     const [pagination, setPagination] = useState({ page: 1, pageSize: 5, totalCount: 0 });
     const [filteredProducts, setFilteredProducts] = useState<IProduct[]>([]);
 
+    // Hàm định dạng ngày
+    const formatDate = (dateString: string) => {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-GB', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+        });
+    };
+
     // Fetch data từ API khi component được render
     useEffect(() => {
         axios.get('http://localhost:3000/gateWay/getData')
             .then((response) => {
-                setProducts(response.data);
-                setPagination((prev) => ({
-                    ...prev,
-                    totalCount: response.data.length,
-                }));
+                console.log('API Response:', response.data);
+
+                // Nếu dữ liệu trả về có thuộc tính `data` chứa mảng
+                const productsArray = response.data.data || response.data;
+
+                if (Array.isArray(productsArray)) {
+                    const formattedData = productsArray.map((product: IProduct) => ({
+                        ...product,
+
+                    }));
+                    setProducts(formattedData);
+                    setPagination((prev) => ({
+                        ...prev,
+                        totalCount: formattedData.length,
+                    }));
+                } else {
+                    console.error('Expected an array but got:', typeof productsArray);
+                }
             })
             .catch((error) => {
                 console.error('Error fetching data:', error);
             });
     }, []);
+
+
 
     // Lọc dữ liệu khi bộ lọc hoặc phân trang thay đổi
     useEffect(() => {
@@ -86,6 +113,7 @@ function ViewPage() {
         }
     };
 
+    console.log(products);
     return (
         <div className="mt-10">
             <div className="mb-6 flex justify-between items-center">
@@ -121,7 +149,7 @@ function ViewPage() {
             </div>
 
             {/* Hiển thị bảng sản phẩm */}
-            <ProductTable products={filteredProducts} />
+            <ProductTable products={filteredProducts} currentBodyLightMode={currentBodyLightMode} currentShadowLightMode={currentShadowLightMode} currentTextLightMode={currentTextLightMode}/>
 
             {/* Phân trang */}
             <div className="mt-4 flex justify-center">
