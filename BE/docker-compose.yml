@@ -26,6 +26,8 @@ services:
     image: mongo:5
     volumes:
       - dbdata:/data/db
+    ports:
+      - "27017:27017"
 
 volumes:
   dbdata:

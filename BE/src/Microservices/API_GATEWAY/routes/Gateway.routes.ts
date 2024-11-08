@@ -9,7 +9,6 @@ const createRateLimitMiddleware = rateLimitMiddleware({
   interval: 60000,
   timeout: 10000,
 });
-
 router.post("/fetchData", createRateLimitMiddleware, fetchData);
 router.get("/getData", createRateLimitMiddleware, getData);
 
